@@ -1,6 +1,7 @@
 package com.example.Clinic_Appoitment_App.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class Doctor {
     private String password;
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonIgnore
     private List<Appointment> appointments;
 
     public Doctor() {

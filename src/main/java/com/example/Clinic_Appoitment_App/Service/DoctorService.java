@@ -3,6 +3,7 @@ package com.example.Clinic_Appoitment_App.Service;
 import com.example.Clinic_Appoitment_App.Model.Doctor;
 import com.example.Clinic_Appoitment_App.Repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +28,12 @@ public class DoctorService {
     }
 
     public Doctor updateDoctor(Doctor doctor) {
+        String hashedPassword = BCrypt.hashpw(doctor.getPassword(), BCrypt.gensalt());
+        doctor.setPassword(hashedPassword);
+
         return doctorRepository.save(doctor);
     }
+
 
     public void deleteDoctor(Long id) {
         doctorRepository.deleteById(id);

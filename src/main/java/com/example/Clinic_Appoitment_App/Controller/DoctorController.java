@@ -38,9 +38,10 @@ public class DoctorController {
     }
 
     @PutMapping("/update-doctor")
-    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor){
-        return new ResponseEntity<>(doctorService.updateDoctor(doctor), HttpStatus.OK);
+    public Doctor updateDoctor(@RequestBody Doctor doctor) {
+        return doctorService.updateDoctor(doctor);
     }
+
 
     @DeleteMapping("/delete-doctor")
     public void deleteDoctor(@RequestParam Long id){
