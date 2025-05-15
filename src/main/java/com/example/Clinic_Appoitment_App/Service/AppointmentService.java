@@ -2,6 +2,7 @@ package com.example.Clinic_Appoitment_App.Service;
 
 import com.example.Clinic_Appoitment_App.DTO.AppointmentRequestDTO;
 import com.example.Clinic_Appoitment_App.DTO.AppointmentResponseDTO;
+import com.example.Clinic_Appoitment_App.DTO.AvailableSlotDTO;
 import com.example.Clinic_Appoitment_App.Model.Appointment;
 import com.example.Clinic_Appoitment_App.Model.Doctor;
 import com.example.Clinic_Appoitment_App.Model.Patient;
@@ -13,6 +14,7 @@ import com.example.Clinic_Appoitment_App.Repository.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,4 +75,27 @@ public class AppointmentService {
                     return dto;
                 }).collect(Collectors.toList());
     }
+
+    public List<AvailableSlotDTO> getAvailableSlotsByDoctorAndDate(Long doctorId, LocalDate appointmentDate) {
+        // Get all slots
+        List<TimeSlot> allSlots = timeSlotRepository.findAll();
+
+        // Get booked slots for the doctor and date
+        List<TimeSlot> bookedSlots = appointmentRepository
+                .findByDoctor_DoctorIdAndAppointmentDate(doctorId, appointmentDate)
+                .stream()
+                .map(Appointment::getTimeSlot)
+                .collect(Collectors.toList());
+
+        // Filter available slots
+        List<TimeSlot> availableSlots = allSlots.stream()
+                .filter(slot -> !bookedSlots.contains(slot))
+                .collect(Collectors.toList());
+
+        // Map to DTO
+        return availableSlots.stream()
+                .map(slot -> new AvailableSlotDTO(slot.getSlotId(), appointmentDate, slot.getStartTime(), slot.getEndTime()))
+                .collect(Collectors.toList());
+    }
+
 }

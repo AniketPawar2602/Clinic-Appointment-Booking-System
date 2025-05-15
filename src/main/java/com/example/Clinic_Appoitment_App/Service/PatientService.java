@@ -3,10 +3,8 @@ package com.example.Clinic_Appoitment_App.Service;
 import com.example.Clinic_Appoitment_App.Model.Patient;
 import com.example.Clinic_Appoitment_App.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +16,7 @@ public class PatientService {
     private PatientRepository patientRepository;
 
     public Patient addPatient(Patient patient) {
+        patient.setPassword(new BCryptPasswordEncoder().encode(patient.getPassword()));
         return patientRepository.save(patient);
     }
 
@@ -31,6 +30,7 @@ public class PatientService {
 
 
     public Patient updatePatient(Patient patient) {
+        patient.setPassword(new BCryptPasswordEncoder().encode(patient.getPassword()));
         return patientRepository.save(patient);
     }
 

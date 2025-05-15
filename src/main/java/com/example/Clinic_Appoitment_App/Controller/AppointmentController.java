@@ -2,12 +2,16 @@ package com.example.Clinic_Appoitment_App.Controller;
 
 import com.example.Clinic_Appoitment_App.DTO.AppointmentRequestDTO;
 import com.example.Clinic_Appoitment_App.DTO.AppointmentResponseDTO;
+import com.example.Clinic_Appoitment_App.DTO.AvailableSlotDTO;
+import com.example.Clinic_Appoitment_App.Model.TimeSlot;
 import com.example.Clinic_Appoitment_App.Service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,5 +36,13 @@ public class AppointmentController {
     @GetMapping("/getAll")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointment(){
         return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAllAppointments());
+    }
+
+    @GetMapping("/available-slots")
+    public ResponseEntity<List<AvailableSlotDTO>> getAvailableSlots(
+            @RequestParam Long doctorId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate appointmentDate) {
+        List<AvailableSlotDTO> availableSlots = appointmentService.getAvailableSlotsByDoctorAndDate(doctorId, appointmentDate);
+        return ResponseEntity.ok(availableSlots);
     }
 }

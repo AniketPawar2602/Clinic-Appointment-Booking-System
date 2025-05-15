@@ -5,7 +5,6 @@ import com.example.Clinic_Appoitment_App.Service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +20,6 @@ public class PatientController {
 
     @PostMapping("/add-patient")
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
-        String rawPassword = patient.getPassword();
-        String hashedPassword = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
-
-        patient.setPassword(hashedPassword);
         return new ResponseEntity<>(patientService.addPatient(patient), HttpStatus.CREATED);
     }
 

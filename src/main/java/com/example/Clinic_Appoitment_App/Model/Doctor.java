@@ -1,6 +1,5 @@
 package com.example.Clinic_Appoitment_App.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
